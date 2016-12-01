@@ -1,3 +1,4 @@
+
 var me = 0;
 var cells = [];
 var player1;
@@ -20,8 +21,10 @@ var afficherObstacles = function(x, y, width, height){
 
     for(var l = 0; l < height; l++){
 
-      cells[x+k][y+l] = '#';
-      Grid.colorCell(x+k, y+l, 'green');
+      if(x+k >= 0 && y+l >= 0){
+        cells[x+k][y+l] = '#';
+        Grid.colorCell(x+k, y+l, 'green');
+      }
     }
   } return cells;
 };
@@ -53,14 +56,16 @@ var createGrid = function(config) {
 
     Grid.create(config.h, config.w);
 
+    console.log(config.obstacles);
     for(var i = 0; i < config.obstacles.length; i++){
       afficherObstacles(config.obstacles[i].x, config.obstacles[i].y,
-                        config.obstacles[i].w,config.obstacles[i].h);
+                        config.obstacles[i].w, config.obstacles[i].h);
     }
 
     Grid.colorCell(player1.x, player1.y, 'blue');
     Grid.colorCell(player2.x, player2.y, 'red');
     console.log(cells);
+
 };
 
 /**
