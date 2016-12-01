@@ -1,7 +1,8 @@
 
 var me = 0;
-var players = [];
 var cells = [];
+var player1;
+var player2;
 
 var createGrid = function(config) {
     /**
@@ -32,7 +33,10 @@ var createGrid = function(config) {
     console.log(cells);
 
     me = config.me;
-    players = config.players;
+
+    player1 = config.players[0];
+    player2 = config.players[1];
+
 
     Grid.create(config.h, config.w);
 
