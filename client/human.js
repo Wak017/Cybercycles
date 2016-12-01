@@ -15,13 +15,13 @@ var createMatrix = function(width, height){
   return cells;
 }
 
-var afficherObstacles = function(x, y, width, height){
+var afficherObstacles = function(x, y, width, height, limiteW, limiteH){
 
   for(var k = 0; k < width; k++){
 
     for(var l = 0; l < height; l++){
 
-      if(x+k >= 0 && y+l >= 0){
+      if(x+k >= 0 && y+l >= 0 && x+k < limiteH && y+l < limiteW){
         cells[x+k][y+l] = '#';
         Grid.colorCell(x+k, y+l, 'green');
       }
@@ -46,25 +46,25 @@ var createGrid = function(config) {
 
     Grid.create(width, height);
     */
-
-    createMatrix(config.w, config.h);
-
+    cellsWidth = config.w;
+    cellsHeight = config.h;
     me = config.me;
-
     player1 = config.players[0];
     player2 = config.players[1];
 
-    Grid.create(config.h, config.w);
+    createMatrix(cellsWidth, cellsHeight);
+    Grid.create(cellsHeight, cellsWidth);
 
-    console.log(config.obstacles);
     for(var i = 0; i < config.obstacles.length; i++){
       afficherObstacles(config.obstacles[i].x, config.obstacles[i].y,
-                        config.obstacles[i].w, config.obstacles[i].h);
+                        config.obstacles[i].w, config.obstacles[i].h,
+                        cellsHeight, cellsWidth);
     }
 
     Grid.colorCell(player1.x, player1.y, 'blue');
+    cells[player1.x][player1.y] = '1';
     Grid.colorCell(player2.x, player2.y, 'red');
-    console.log(cells);
+    cells[player2.x][player2.y] = '2';
 
 };
 
