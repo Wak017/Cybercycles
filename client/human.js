@@ -1,8 +1,30 @@
-
 var me = 0;
 var cells = [];
 var player1;
 var player2;
+
+var createMatrix = function(width, height){
+
+  for(var i = 0; i < width; i++) {
+
+    cells[i] = Array(height);
+  }
+
+  fill(cells, " ");
+  return cells;
+}
+
+var afficherObstacles = function(x, y, width, height){
+
+  for(var k = 0; k < width; k++){
+
+    for(var l = 0; l < height; l++){
+
+      cells[x+k][y+l] = '#';
+      Grid.colorCell(x+k, y+l, 'green');
+    }
+  } return cells;
+};
 
 var createGrid = function(config) {
     /**
@@ -22,25 +44,23 @@ var createGrid = function(config) {
     Grid.create(width, height);
     */
 
-    for(var i = 0; i < config.w; i++) {
-
-      cells[i] = [config.h];
-
-    }
-
-    fill(cells, " ");
-
-    console.log(cells);
+    createMatrix(config.w, config.h);
 
     me = config.me;
 
     player1 = config.players[0];
     player2 = config.players[1];
 
-
     Grid.create(config.h, config.w);
 
+    for(var i = 0; i < config.obstacles.length; i++){
+      afficherObstacles(config.obstacles[i].x, config.obstacles[i].y,
+                        config.obstacles[i].w,config.obstacles[i].h);
+    }
 
+    Grid.colorCell(player1.x, player1.y, 'blue');
+    Grid.colorCell(player2.x, player2.y, 'red');
+    console.log(cells);
 };
 
 /**
