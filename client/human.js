@@ -1,10 +1,10 @@
 
-var me = 0;
-var cells = [];
-var player1;
-var player2;
-var cellsWidth;
-var cellsHeight;
+var me = 0;                                                   // ID du joueur
+var cells = [];                                               // Grille pour permettre le déroulement du jeu
+var player1;                                                  // configurations du joueur1
+var player2;                                                  // configurations du joueur2
+var cellsWidth;                                               // largeur de la grille
+var cellsHeight;                                              // hauteur de la grille
 
 var createGrid = function(config) {
     /**
@@ -23,21 +23,23 @@ var createGrid = function(config) {
 
     Grid.create(width, height);
     */
-    cellsWidth = config.w;
-    cellsHeight = config.h;
-    me = config.me;
-    player1 = config.players[0];
-    player2 = config.players[1];
+    cellsWidth = config.w;                                              // stock la largeur de la grille dans une variable
+    cellsHeight = config.h;                                             // stock la hauteur
+    me = config.me;                                                     // stock le ID du joueur
+    player1 = config.players[0];                                        // stock les configs du joueur 1
+    player2 = config.players[1];                                        // stock les configs du joueur 2
 
-    createMatrix(cellsWidth, cellsHeight);
-    Grid.create(cellsHeight, cellsWidth);
+    createMatrix(cellsWidth, cellsHeight);                              // créé une matrice qui aidera pour le visuel
+    Grid.create(cellsHeight, cellsWidth);                               // créé la grille qu'on voit
 
+    // cette boucle for fera afficher les obstacles sur la grille
     for(var i = 0; i < config.obstacles.length; i++){
       afficherObstacles(config.obstacles[i].x, config.obstacles[i].y,
                         config.obstacles[i].w, config.obstacles[i].h,
                         cellsHeight, cellsWidth);
     }
 
+    // on fait afficher la position initiale des joueurs
     Grid.colorCell(player1.x, player1.y, 'blue');
     cells[player1.x][player1.y] = '1';
     Grid.colorCell(player2.x, player2.y, 'red');
@@ -75,11 +77,15 @@ var victory = function(winner) {
      * TODO : mettre à jour la grille en indiquant d'une couleur différente
      * le/les joueurs morts.
      */
+
+     // les variables m et n serviront à positionner les cellules blanches au tableau.
+     // Par défaut, m est le centre de la grille en largeur et n est le centre de la
+     // grille en hauteur. Donc cells[m][n] est le centre de la grille.
      var m = Math.floor(cellsWidth/2);
      var n = Math.floor(cellsHeight/2);
 
-     console.log(winner);
-
+     // La fonction gagnant fait afficher le "P  WINS" lorsqu'on a un gagnant.
+     // Le chiffre 1 ou 2 manquant est affiché selon le gagnant.
      var gagnant = function(){
 
        Grid.colorCell(m-13, n-2, 'white'); Grid.colorCell(m-13, n-1, 'white'); Grid.colorCell(m-13, n, 'white');
@@ -102,6 +108,7 @@ var victory = function(winner) {
 
      };
 
+     // La fonction perdant met en gris toutes les cellules jouées par le joueur qui a perdu
      var perdant = function(joueur){
 
 
@@ -117,16 +124,19 @@ var victory = function(winner) {
        }
      }
 
+     // Si joueur1 gagne
      if(winner == 1){
 
+       // codage pour mettre le "1" dans "P1 WINS"
        Grid.colorCell(m-9, n-1, 'white'); Grid.colorCell(m-9, n+2, 'white'); Grid.colorCell(m-8, n-2, 'white');
        Grid.colorCell(m-8, n-1, 'white'); Grid.colorCell(m-8, n, 'white'); Grid.colorCell(m-8, n+1, 'white');
        Grid.colorCell(m-8, n+2, 'white'); Grid.colorCell(m-7, n+2, 'white');
        Grid.colorCell(player2.x, player2.y, 'gray');
 
-       perdant(winner+1);
-       gagnant();
+       perdant(winner+1);             // on met le perdant en gris
+       gagnant();                     // on affiche le texte "P  WINS"
      }
+     // codage pour mettre le "2" dans "P2 WINS"
      else if(winner == 2){
 
        Grid.colorCell(m-9, n-2, 'white'); Grid.colorCell(m-9, n+2, 'white'); Grid.colorCell(m-8, n-2, 'white');
@@ -134,11 +144,12 @@ var victory = function(winner) {
        Grid.colorCell(m-7, n, 'white'); Grid.colorCell(m-7, n+2, 'white');
        Grid.colorCell(player1.x, player1.y, 'gray');
 
-       perdant(winner-1);
-       gagnant();
+       perdant(winner-1);             // on met le perdant en gris
+       gagnant();                     // on affiche le texte "P  WINS"
      }
      else{
 
+       // lignes de code pour écrire "DRAW" si les deux joueurs sont mort en même temps
        Grid.colorCell(m-8, n-2, 'white'); Grid.colorCell(m-8, n-1, 'white'); Grid.colorCell(m-8, n, 'white');
        Grid.colorCell(m-8, n+1, 'white'); Grid.colorCell(m-8, n+2, 'white'); Grid.colorCell(m-7, n-2, 'white');
        Grid.colorCell(m-7, n+2, 'white'); Grid.colorCell(m-6, n-1, 'white'); Grid.colorCell(m-6, n, 'white');
@@ -227,6 +238,7 @@ var nextMove = function(previousMoves) {
     return direction;
 };
 
+// fonction qui créé la matrice cells pour
 var createMatrix = function(width, height){
 
   for(var i = 0; i < width; i++) {
@@ -234,10 +246,11 @@ var createMatrix = function(width, height){
     cells[i] = Array(height);
   }
 
-  fill(cells, " ");
+  fill(cells, " ");                     // chaque nouvelle cellule est remplie d'espace vide
   return cells;
 }
 
+// fonction qui affiche les obstacles à l'écran et ajoute un '#' dans la grille cells.
 var afficherObstacles = function(x, y, width, height, limiteW, limiteH){
 
   for(var k = 0; k < width; k++){
@@ -324,6 +337,7 @@ var printMatrix = function(matrix) {
 
 };
 
+// fonction qui remplie la matrice d'une valeur en particulier.
 var fill = function(matrix, value) {
 
   for(var i = 0; i < matrix.length; i++) {
@@ -331,8 +345,6 @@ var fill = function(matrix, value) {
     for(var j = 0; j < matrix[i].length; j++) {
 
       matrix[i][j] = value;
-      Grid.colorCell(i, j, 'black');
-
     }
 
   }
