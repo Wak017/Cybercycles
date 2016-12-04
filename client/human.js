@@ -5,6 +5,7 @@ var player1;                                                  // configurations 
 var player2;                                                  // configurations du joueur2
 var cellsWidth;                                               // largeur de la grille
 var cellsHeight;                                              // hauteur de la grille
+var m;                                                        // milieu de la grille en largeur. Exemple: cellsWidth = 30, alors m = 15.
 
 var createGrid = function(config) {
     /**
@@ -72,98 +73,46 @@ var nextMove = function(previousMoves) {
     return direction;
 };
 
+// fonction qui affichera le joueur gagnant à la fin d'une partie, ainsi que
+// changer la couleur du perdant pour gris.
 var victory = function(winner) {
-    /**
-     * TODO : mettre à jour la grille en indiquant d'une couleur différente
-     * le/les joueurs morts.
-     */
 
-     // les variables m et n serviront à positionner les cellules blanches au tableau.
-     // Par défaut, m est le centre de la grille en largeur et n est le centre de la
-     // grille en hauteur. Donc cells[m][n] est le centre de la grille.
-     var m = Math.floor(cellsWidth/2);
-     var n = Math.floor(cellsHeight/2);
-
-     // La fonction gagnant fait afficher le "P  WINS" lorsqu'on a un gagnant.
-     // Le chiffre 1 ou 2 manquant est affiché selon le gagnant.
-     var gagnant = function(){
-
-       Grid.colorCell(m-13, n-2, 'white'); Grid.colorCell(m-13, n-1, 'white'); Grid.colorCell(m-13, n, 'white');
-       Grid.colorCell(m-13, n+1, 'white'); Grid.colorCell(m-13, n+2, 'white'); Grid.colorCell(m-12, n-2, 'white');
-       Grid.colorCell(m-12, n, 'white'); Grid.colorCell(m-11, n-2, 'white'); Grid.colorCell(m-11, n-1, 'white');
-       Grid.colorCell(m-11, n, 'white'); Grid.colorCell(m-4, n-2, 'white'); Grid.colorCell(m-4, n-1, 'white');
-       Grid.colorCell(m-4, n, 'white'); Grid.colorCell(m-4, n+1, 'white'); Grid.colorCell(m-3, n+2, 'white');
-       Grid.colorCell(m-2, n-1, 'white'); Grid.colorCell(m-2, n, 'white'); Grid.colorCell(m-2, n+1, 'white');
-       Grid.colorCell(m-1, n+2, 'white'); Grid.colorCell(m, n-2, 'white'); Grid.colorCell(m, n-1, 'white');
-       Grid.colorCell(m, n, 'white'); Grid.colorCell(m, n+1, 'white'); Grid.colorCell(m+2, n-2, 'white');
-       Grid.colorCell(m+2, n+2, 'white'); Grid.colorCell(m+3, n-2, 'white'); Grid.colorCell(m+3, n-1, 'white');
-       Grid.colorCell(m+3, n, 'white'); Grid.colorCell(m+3, n+1, 'white'); Grid.colorCell(m+3, n+2, 'white');
-       Grid.colorCell(m+4, n-2, 'white'); Grid.colorCell(m+4, n+2, 'white'); Grid.colorCell(m+6, n-2, 'white');
-       Grid.colorCell(m+6, n-1, 'white'); Grid.colorCell(m+6, n, 'white'); Grid.colorCell(m+6, n+1, 'white');
-       Grid.colorCell(m+6, n+2, 'white'); Grid.colorCell(m+7, n, 'white'); Grid.colorCell(m+8, n+1, 'white');
-       Grid.colorCell(m+9, n-2, 'white'); Grid.colorCell(m+9, n-1, 'white'); Grid.colorCell(m+9, n, 'white');
-       Grid.colorCell(m+9, n+1, 'white'); Grid.colorCell(m+9, n+2, 'white'); Grid.colorCell(m+11, n-1, 'white');
-       Grid.colorCell(m+11, n+2, 'white'); Grid.colorCell(m+12, n-2, 'white'); Grid.colorCell(m+12, n, 'white');
-       Grid.colorCell(m+12, n+2, 'white'); Grid.colorCell(m+13, n-2, 'white'); Grid.colorCell(m+13, n+1, 'white');
-
-     };
-
-     // La fonction perdant met en gris toutes les cellules jouées par le joueur qui a perdu
-     var perdant = function(joueur){
-
-
-       for(var y = 0; y < cellsWidth; y++){
-
-         for(var z = 0; z < cellsHeight; z++){
-
-           if(cells[y][z] == joueur){
-
-             Grid.colorCell(y, z, 'gray');
-           }
-         }
-       }
-     }
+     // la variable m servira à centrer le texte de victoire au tableau.
+     // Par défaut, m est le centre de la grille en largeur.
+     // Puisque la variable m sera appelée énormément de fois pour servir de position X,
+     // il a été préférable de raccourcir son nom de variable, plutôt qu'à
+     // un nom de variable du style "milieuDeGrilleEnLargeur".
+     m = Math.floor(cellsWidth/2);
 
      // Si joueur1 gagne
      if(winner == 1){
 
-       // codage pour mettre le "1" dans "P1 WINS"
-       Grid.colorCell(m-9, n-1, 'white'); Grid.colorCell(m-9, n+2, 'white'); Grid.colorCell(m-8, n-2, 'white');
-       Grid.colorCell(m-8, n-1, 'white'); Grid.colorCell(m-8, n, 'white'); Grid.colorCell(m-8, n+1, 'white');
-       Grid.colorCell(m-8, n+2, 'white'); Grid.colorCell(m-7, n+2, 'white');
-       Grid.colorCell(player2.x, player2.y, 'gray');
-
        perdant(winner+1);             // on met le perdant en gris
        gagnant();                     // on affiche le texte "P  WINS"
-     }
-     // codage pour mettre le "2" dans "P2 WINS"
-     else if(winner == 2){
+       pwins("25", m-9); pwins("12345", m-8); pwins("5", m-7); // codage pour mettre le "1" dans "P1 WINS"
 
-       Grid.colorCell(m-9, n-2, 'white'); Grid.colorCell(m-9, n+2, 'white'); Grid.colorCell(m-8, n-2, 'white');
-       Grid.colorCell(m-8, n+1, 'white'); Grid.colorCell(m-8, n+2, 'white'); Grid.colorCell(m-7, n-1, 'white');
-       Grid.colorCell(m-7, n, 'white'); Grid.colorCell(m-7, n+2, 'white');
-       Grid.colorCell(player1.x, player1.y, 'gray');
+     }
+     // Si joueur2 gagne
+     else if(winner == 2){
 
        perdant(winner-1);             // on met le perdant en gris
        gagnant();                     // on affiche le texte "P  WINS"
+       pwins("25", m-9); pwins("145", m-8); pwins("235", m-7); // affiche le "2"
+
      }
+     // S'il y a égalité
      else{
 
+       // les deux joueurs sont perdants
+       perdant(1);
+       perdant(2);
        // lignes de code pour écrire "DRAW" si les deux joueurs sont mort en même temps
-       Grid.colorCell(m-8, n-2, 'white'); Grid.colorCell(m-8, n-1, 'white'); Grid.colorCell(m-8, n, 'white');
-       Grid.colorCell(m-8, n+1, 'white'); Grid.colorCell(m-8, n+2, 'white'); Grid.colorCell(m-7, n-2, 'white');
-       Grid.colorCell(m-7, n+2, 'white'); Grid.colorCell(m-6, n-1, 'white'); Grid.colorCell(m-6, n, 'white');
-       Grid.colorCell(m-6, n+1, 'white'); Grid.colorCell(m-4, n-2, 'white'); Grid.colorCell(m-4, n-1, 'white');
-       Grid.colorCell(m-4, n, 'white'); Grid.colorCell(m-4, n+1, 'white'); Grid.colorCell(m-4, n+2, 'white');
-       Grid.colorCell(m-3, n-2, 'white'); Grid.colorCell(m-3, n, 'white'); Grid.colorCell(m-2, n-1, 'white');
-       Grid.colorCell(m-2, n+1, 'white'); Grid.colorCell(m-2, n+2, 'white'); Grid.colorCell(m, n-1, 'white');
-       Grid.colorCell(m, n, 'white'); Grid.colorCell(m, n+1, 'white'); Grid.colorCell(m, n+2, 'white');
-       Grid.colorCell(m+1, n-2, 'white'); Grid.colorCell(m+1, n, 'white'); Grid.colorCell(m+2, n-1, 'white');
-       Grid.colorCell(m+2, n, 'white'); Grid.colorCell(m+2, n+1, 'white'); Grid.colorCell(m+2, n+2, 'white');
-       Grid.colorCell(m+4, n-2, 'white'); Grid.colorCell(m+4, n-1, 'white'); Grid.colorCell(m+4, n, 'white');
-       Grid.colorCell(m+4, n+1, 'white'); Grid.colorCell(m+5, n+2, 'white'); Grid.colorCell(m+6, n+1, 'white');
-       Grid.colorCell(m+7, n+2, 'white'); Grid.colorCell(m+8, n-2, 'white'); Grid.colorCell(m+8, n-1, 'white');
-       Grid.colorCell(m+8, n, 'white'); Grid.colorCell(m+8, n+1, 'white');
+       pwins("12345", m-8); pwins("15", m-7); pwins("234", m-6);
+       pwins("12345", m-4); pwins("13", m-3); pwins("245", m-2);
+       pwins("2345", m); pwins("13", m+1); pwins("2345", m+2);
+       pwins("1234", m+4); pwins("5", m+5); pwins("234", m+6);
+       pwins("5", m+7); pwins("1234", m+8);
+
      }
 };
 
@@ -350,3 +299,46 @@ var fill = function(matrix, value) {
   }
 
 };
+
+/* la fonction pwins colorie les cases blanches "P  WINS" lorqu'un joueur gagne.
+ * Petite explication sur le fonctionnement de la fonction: On fait appel à
+ * la fonction p("134", m-7). La variable m est le centre de la grille en largeur
+ * donc les fonctions pwins seront appelées de m-x à m+x pour que le texte soit
+ * centré. le string "134" est en fait la position Y des cases à mettre en blanc.
+ * Donc ici on aura trois cases blanches. Si m = 15, les 3 cases colorées
+ * seront les cases (x,y) = (8,1), (8,3) et (8,4). */
+var pwins = function(casesAColorer, positionX){
+
+  for(var y = 0; y < casesAColorer.length; y++){
+
+    Grid.colorCell(positionX, casesAColorer.charAt(y), 'white')
+  }
+}
+
+// La fonction gagnant fait afficher le "P  WINS" lorsqu'on a un gagnant.
+// La fonction fait appel à la fonction pwins pour éviter les redondances
+var gagnant = function(){
+
+  pwins("12345", m-13); pwins("13", m-12); pwins("123", m-11);
+  pwins("1234", m-4); pwins("5", m-3); pwins("234", m-2);
+  pwins("5", m-1); pwins("1234", m); pwins("15", m+2);
+  pwins("12345", m+3); pwins("15", m+4); pwins("12345", m+6);
+  pwins("3", m+7); pwins("4", m+8); pwins("12345", m+9);
+  pwins("25", m+11); pwins("135", m+12); pwins("14", m+13);
+
+};
+
+// La fonction perdant met en gris toutes les cellules jouées par le joueur qui a perdu
+var perdant = function(joueur){
+
+  for(var y = 0; y < cellsWidth; y++){
+
+    for(var z = 0; z < cellsHeight; z++){
+
+      if(cells[y][z] == joueur){
+
+        Grid.colorCell(y, z, 'gray');
+      }
+    }
+  }
+}
