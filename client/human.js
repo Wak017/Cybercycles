@@ -5,7 +5,6 @@ var player1;                                                  // configurations 
 var player2;                                                  // configurations du joueur2
 var cellsWidth;                                               // largeur de la grille
 var cellsHeight;                                              // hauteur de la grille
-var m;                                                        // milieu de la grille en largeur. Exemple: cellsWidth = 30, alors m = 15.
 
 var createGrid = function(config) {
     /**
@@ -82,13 +81,13 @@ var victory = function(winner) {
      // Puisque la variable m sera appelée énormément de fois pour servir de position X,
      // il a été préférable de raccourcir son nom de variable, plutôt qu'à
      // un nom de variable du style "milieuDeGrilleEnLargeur".
-     m = Math.floor(cellsWidth/2);
+     var m = Math.floor(cellsWidth/2);
 
      // Si joueur1 gagne
      if(winner == 1){
 
        perdant(winner+1);             // on met le perdant en gris
-       gagnant();                     // on affiche le texte "P  WINS"
+       gagnant(m);                     // on affiche le texte "P  WINS"
        pwins("25", m-9); pwins("12345", m-8); pwins("5", m-7); // codage pour mettre le "1" dans "P1 WINS"
 
      }
@@ -96,7 +95,7 @@ var victory = function(winner) {
      else if(winner == 2){
 
        perdant(winner-1);             // on met le perdant en gris
-       gagnant();                     // on affiche le texte "P  WINS"
+       gagnant(m);                     // on affiche le texte "P  WINS"
        pwins("25", m-9); pwins("145", m-8); pwins("235", m-7); // affiche le "2"
 
      }
@@ -106,6 +105,7 @@ var victory = function(winner) {
        // les deux joueurs sont perdants
        perdant(1);
        perdant(2);
+
        // lignes de code pour écrire "DRAW" si les deux joueurs sont mort en même temps
        pwins("12345", m-8); pwins("15", m-7); pwins("234", m-6);
        pwins("12345", m-4); pwins("13", m-3); pwins("245", m-2);
@@ -317,7 +317,7 @@ var pwins = function(casesAColorer, positionX){
 
 // La fonction gagnant fait afficher le "P  WINS" lorsqu'on a un gagnant.
 // La fonction fait appel à la fonction pwins pour éviter les redondances
-var gagnant = function(){
+var gagnant = function(m){
 
   pwins("12345", m-13); pwins("13", m-12); pwins("123", m-11);
   pwins("1234", m-4); pwins("5", m-3); pwins("234", m-2);
